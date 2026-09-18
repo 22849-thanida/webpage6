@@ -211,3 +211,40 @@ class EpicOceanAudioEngine {
 
 // Global Instance
 const soundEngine = new EpicOceanAudioEngine();
+document.querySelector('.enter-btn').addEventListener('click', function() {
+    // 1. เริ่มระบบเสียง (ปลดล็อก Autoplay Policy ของเบราว์เซอร์)
+    soundEngine.init();
+
+    // 2. เล่นเสียง Stage 1: Charge Up
+    soundEngine.playChargeUp(2.2);
+    
+    // เริ่มแอนิเมชัน CSS Portal Phase 1 ...
+    
+    // 3. เล่นเสียง Stage 2: Implosion (เมื่อผ่านไป 2.2 วินาที)
+    setTimeout(() => {
+        soundEngine.playImplosion(1.6);
+    }, 2200);
+
+    // 4. เล่นเสียง Stage 3: Cinematic Blast & Impact (เมื่อผ่านไป 3.8 วินาที)
+    setTimeout(() => {
+        soundEngine.playCinematicBlast();
+        
+        // สั่นหน้าจอ + Flash แสงขาวระเบิด
+        document.body.classList.add('earthquake-shake');
+        document.querySelector('.screen-flash').classList.add('flash-active');
+        
+        // เริ่มเล่นเสียง Ambient ท้องทะเลลึกต่อเนื่อง
+        soundEngine.startOceanAmbient();
+    }, 3800);
+
+    // 5. เปิดผ้าม่านเข้าสู่หน้าเว็บหลัก
+    setTimeout(() => {
+        document.querySelector('.ocean-curtain').classList.add('open');
+    }, 4500);
+});
+
+// ปุ่ม Toggle เสียงที่มุมขวาล่าง (.sound-toggle)
+document.querySelector('.sound-toggle').addEventListener('click', function() {
+    const isMuted = soundEngine.toggleSound();
+    this.textContent = isMuted ? '🔇' : '🔊';
+});
